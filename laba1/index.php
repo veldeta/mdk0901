@@ -7,17 +7,16 @@ require_once 'php/security.php';
 
 if(!empty($_POST)){
     if(password_verify($ha, $_POST['hash']) && $_POST['sendreg']){
-        sql($_POST);
+        handler($_POST);
     } elseif(password_verify($ha, $_POST['hash']) && $_POST['logout']){
-        exi();    
+        logout();    
     } elseif(password_verify($ha, $_POST['hash']) && $_POST['sendlogin']){
         log_user($_POST);
     }
-    header('location: '. $_SERVER['PHP_SELF'] . '?page=main');
+    header('location: '. $_SERVER['PHP_SELF'] . MAIN);
     exit;
 }
-
-if($_SERVER['PATH_TRANSLATED']){
+if($_SERVER['PATH_INFO']){
     header("location: {$_SERVER['SCRIPT_NAME']}");
     exit;
 }
@@ -25,24 +24,24 @@ if($_SERVER['PATH_TRANSLATED']){
 $page = $_GET['paramets'] ?? $_GET['page'];
 
 if(!$page && $_GET){
-    header("Location:{$_SERVER['PHP_SELF']}?page=main");
+    header("Location:{$_SERVER['PHP_SELF']}". MAIN);
     exit;
 }
-$ex = ($_COOKIE['user'])? 'registration' : '';
+
+if($_COOKIE['user']){
+    $user = unserialize(base64_decode($_COOKIE['user']));
+    $ex = 'registration';
+}
 if($page){
     if(!array_key_exists($_GET['page'], $arr) || ($_GET['paramets']) 
     ? (array_key_exists($page, $arr)) 
     ? !array_key_exists($_GET['page'], $arr[$page]['sub']) : true : '' || $_GET['page'] == $ex)
     {    
-        header("Location:{$_SERVER['PHP_SELF']}?page=main");
+        header("Location:{$_SERVER['PHP_SELF']}". MAIN);
         exit;
-    
     }
 }
 
-if($_COOKIE['user']){
-    $user = unserialize(base64_decode($_COOKIE['user']));
-}
 $hash = password_hash($ha, PASSWORD_DEFAULT);
 ?>
 <!DOCTYPE html>
@@ -52,7 +51,10 @@ $hash = password_hash($ha, PASSWORD_DEFAULT);
     <meta charset="UTF-8">
     <title>Лаба 1</title>
     <link rel='stylesheet' href="acce/<?= $arr['acce']['css']['name']?>">
-    <?= href($arr['acce']['css'][$page]) ?>
+    <?
+        $mass =  sr_main($arr['acce']['css'][$page], false, null, 'css');
+        echo $mass['css'];
+    ?>
 </head>
 
 <body>
@@ -64,18 +66,23 @@ $hash = password_hash($ha, PASSWORD_DEFAULT);
             </h3>
         </header>
         <main>
-            <?= sr_main($arr, true);?>
+            <?
+                $main = sr_main($arr, true);
+                echo $main['ul'];
+            ?>
+
             
-            <div style="display: flex;">
+            <div id="st" style="display: flex;" class="v">
                 <? 
                     if($page && $arr[$page]['sub']){
-                        echo sr_main($arr[$page]['sub'], false, $page);
+                        $mass = sr_main($arr[$page]['sub'], false, $page);
+                        echo $mass['ul'];
                     } else {
                         if($page != 'registration')
                             include_once 'html/auto.html';
                     }
                 ?>
-            
+            </div>
                 <?
                     if($_GET['paramets']) {
                         $html = "html/{$arr[$page]['sub'][$_GET['page']]['html']}";
@@ -89,13 +96,17 @@ $hash = password_hash($ha, PASSWORD_DEFAULT);
                         }
                     }
                 ?>
-            </div>
         </main>
         <footer></footer>
 
     </div>
 
-    <?= href($arr['acce']['js'][$page], true)?>
+    <?
+    echo "<script>let id_page = '{$_SESSION['id']}'</script>";
+    echo "<script src='acce/{$arr['acce']['js']['name']}'></script>";
+    $mass = sr_main($arr['acce']['js'][$page], false, null, 'js');
+    echo $mass['js'];
+    ?>
 
 </body>
 </html>

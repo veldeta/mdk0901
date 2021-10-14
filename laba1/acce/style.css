@@ -38,15 +38,19 @@ main {
 }
 
 .stroka {
-    margin: 0 50px 100px 0;
+    margin: 50px 0 50px 0;
     font-size: 50px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .stroka>li>a {
     margin: 0 20px 0 0;
     text-decoration: none;
 }
-
+.v ul{  
+    display: block;
+}
 li {
     list-style: none;
 }

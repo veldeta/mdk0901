@@ -1,3 +1,15 @@
+<?
+if($_SERVER['PATH_TRANSLATED']){
+    header('Location: '. $_SERVER['SCRIPT_NAME']);
+    exit;
+}
+
+if($_GET){
+    header('Location: '. $_SERVER['SCRIPT_NAME']);
+    exit;
+}
+
+?>
 <head>
     <link rel='stylesheet' href='acce/style.css'>
 </head>

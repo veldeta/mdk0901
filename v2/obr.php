@@ -6,7 +6,7 @@ function b (){
     
         $file = file('ban.txt');
         if(array_search($_SERVER['REMOTE_ADDR'], $file)) {
-            header("location: {$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}");
+            header("location: {$_SERVER['SCRIPT_NAME']}");
             die;
         } 
 
@@ -14,7 +14,7 @@ function b (){
         fwrite($ban, "\n".$_SERVER['REMOTE_ADDR']);
         fclose($ban);
         
-        header("location: {$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}");
+        header("location: {$_SERVER['SCRIPT_NAME']}");
         die;
     }
 }
@@ -28,12 +28,7 @@ if(!empty($_POST)) {
         if($num == $_SESSION['sum']){
             $answer = 'Правильный';
         }
-        $_SESSION['text'] = <<<END
-        Ответ $answer <br>
-        Ваш ответ: {$num}<br>
-        Правильный ответ: {$_SESSION['sum']}
-        END;
-        
+        $_SESSION['answer'] = [$answer, $num, $_SESSION['sum']];        
         $_SESSION['bool'] = 'answer';
 
         header("location: {$_SESSION['index']}");

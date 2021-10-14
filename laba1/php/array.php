@@ -10,7 +10,8 @@ $arr = [
             'groups' => ['groups.css', ],
         ],
         'js' => [
-            'schedules' => ['script.js',],
+            'name' => 'script.js',
+            'schedules' => ['schedules.js',],
         ]
     ],
     'main' => [
@@ -66,6 +67,7 @@ $arr = [
         'page' => 'registration',
         'html' => 'registration.html',
         'ru' => 'Регистрация',
+        'cook' => 'registration'
     ],
 ];
 

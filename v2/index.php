@@ -5,6 +5,7 @@ $ban = file('ban.txt');
 
 if($_SERVER['PATH_TRANSLATED']){
     header('location: '. $_SERVER['SCRIPT_NAME']);
+    exit;
 }
 
 if(array_search($_SERVER['REMOTE_ADDR'], $ban)) {
@@ -25,7 +26,6 @@ $_SESSION['hash'] = password_hash('1234567890ZYXWVUTSRQPONMLKJIHGFEDCBAzyxwvutsr
 $n = rand(1,10);
 $_SESSION['sum'] = 10 * $n;
 $_SESSION['index'] = $_SERVER['PHP_SELF'];
-var_dump($_SESSION);
 
 if(!$_SESSION['bool']){   
     echo <<<END
@@ -45,8 +45,13 @@ if(!$_SESSION['bool']){
     </form>
     END;
 }
-if($_SESSION['bool'] == 'answer'){
+
+if($_SESSION['bool'] == 'answer') {
     $_SESSION['bool'] = false;
-    echo $_SESSION['text'];
+    echo <<<END
+    Ответ {$_SESSION['answer']['0']} <br>
+    Ваш ответ: {$_SESSION['answer']['1']}<br>
+    Правильный ответ: {$_SESSION['answer']['2']}
+    END;
     echo "<br><a href='{$_SERVER['PHP_SELF']}' style='text-decoration: none'><button>Повторить</button></a>";
 }

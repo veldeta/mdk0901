@@ -3,7 +3,7 @@
         <div>
             <lable>
                 <p>Имя:</p>
-                <input type="text" name="login" placeholder="user" required>
+                <input type="text" name="login" placeholder="user"  value="<?= $_SESSION['data']['login']?>" required>
             </lable>
         </div>
         <div>
@@ -21,19 +21,19 @@
         <div>
             <lable>
                 <p>ФИО:</p>
-                <input type="text" name="fio" placeholder="Иванов Иван Иванович" required>
+                <input type="text" name="fio" placeholder="Иванов Иван Иванович"  value="<?= $_SESSION['data']['fio']?>" required>
             </lable>
         </div>
         <div>
             <lable>
                 <p>Дата рождения:</p>
-                <input type="date" name="date" required>
+                <input type="date" name="date"  value="<?= $_SESSION['data']['date']?>" required>
             </lable>
         </div>
         <div>
             <lable>
                 <p>Почта:</p>
-                <input type="email" name="email" required placeholder="user@user.ru">
+                <input type="email" name="email" required placeholder="user@user.ru" value="<?= $_SESSION['data']['email']?>" >
             </lable>
         </div>
         <div>
@@ -43,7 +43,7 @@
         </div>
         <div>
             <lable>
-                <input type="submit" name="sendreg">
+                <input type="submit" name="sendreg" value="Зарегистрироваться">
             </lable>
         </div>
     </form>
