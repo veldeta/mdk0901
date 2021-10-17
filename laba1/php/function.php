@@ -5,29 +5,78 @@
  * Получение массива данных если не было ошибок перед этим
  * если ошибка возращает значение false
  */
-function my_sql($value, $login, $query = null){
+// function my_sql($value, $login, $query = null){
     
-    $mysqli = mysqli_connect('localhost', 'root','','users_laba2');
+//     $mysqli = mysqli_connect('localhost', 'root','','users_laba2');
 
-    if(!mysqli_connect_error()){
-        $select = "SELECT `login`, `password`, `name_user`, `_date`, `email` FROM `users` WHERE `login`='" . $login . "'";
-        $result = mysqli_query($mysqli,$select);
+//     if(!mysqli_connect_error()){
+//         $select = "SELECT `login`, `password`, `name_user`, `_date`, `email` FROM `users` WHERE `login`='" . $login . "'";
+//         $result = mysqli_query($mysqli,$select);
 
-        if($value == 'registration' && $result->num_rows == 0){
-            if(mysqli_query($mysqli, "INSERT INTO `users` (`login`, `password`, `name_user`, `_date`, `email`) VALUES ('" . $query)){
-                $ma = mysqli_query($mysqli, $select);
-                $info = mysqli_fetch_assoc($ma);
-            }
-        } elseif($value == 'authorization' && $result->num_rows != 0){
-            $info = mysqli_fetch_assoc($result);
+//         if($value == 'registration' && $result->num_rows == 0){
+//             if(mysqli_query($mysqli, "INSERT INTO `users` (`login`, `password`, `name_user`, `_date`, `email`) VALUES ('" . $query)){
+//                 $ma = mysqli_query($mysqli, $select);
+//                 $info = mysqli_fetch_assoc($ma);
+//             }
+//         } elseif($value == 'authorization' && $result->num_rows != 0){
+//             $info = mysqli_fetch_assoc($result);
+//         } else {
+//             $info = false;
+//         }
+//     } else {
+//         $info = false;
+//     }
+//     mysqli_close($mysqli);
+//     return $info;
+// }
+/**
+ * $query = "SELECT login FROM users WHERE login=?" 
+ * 
+ */
+function mysql_stmt($query, $mass = null, $answer = false){
+
+    $params = $mass['date_stmt'];
+    $type = $mass['type'];
+    $pos = $mass['date_answer'];
+    $row = [];
+    $link =  mysqli_connect('localhost','root', '','users_laba2');
+
+    if(!mysqli_connect_errno()){
+
+        $stmts = mysqli_prepare($link, $query);
+
+        if(is_array($params)){
+            mysqli_stmt_bind_param($stmts, $type, ...$mass['date_stmt']);
         } else {
-            $info = false;
+            mysqli_stmt_bind_param($stmts, $type, $mass['date_stmt']);
+        }
+
+        if(!empty($pos)){
+
+            foreach($pos as $key => $value){
+                $param[] = &$row[$key];
+            }
+            call_user_func_array(array($stmts, 'bind_result'), $param);
+
+        }
+
+        $res = (mysqli_stmt_execute($stmts)) ?  true : false;
+
+        if(!empty($pos)){
+            mysqli_stmt_fetch($stmts);
+        }
+        
+        if($answer){
+            $res = $param;
         }
     } else {
-        $info = false;
+        $error = ("Не удалось подключиться: %s\n" . mysqli_connect_error());
     }
-    mysqli_close($mysqli);
-    return $info;
+    mysqli_stmt_close($stmts);
+    mysqli_close($link);
+
+    $ret = $error ?? $res;
+    return $ret; 
 }
 
 
@@ -55,19 +104,20 @@ function sr_main($arr_in, $g = false, $paramets = null, $type = false){
 
         }
     }
-    if($_GET['page']) $_SESSION['id'] = $_GET['page'] ?? $_GET['paramets'];
+    
+    // if($_GET['page']) $_SESSION['id'] = $_GET['page'] ?? $_GET['paramets'];
     if(!$type){
         $s['ul'] = "<ul class='stroka'>";
         foreach($arr_in as $key => $val){
             if($key == 'acce' || $key == $_SESSION['cook']){
                 continue;    
             }
-            if($key == $_SESSION['id'] && $key != 'registration' && $key != 'main'){
-                $id = "id='{$_SESSION['id']}'";
-            }
+            // if($key == $_SESSION['id'] && $key != 'registration' && $key != 'main'){
+            //     $id = "id='{$_SESSION['id']}'";
+            // }
 
-            $s['ul'] .= "<li {$id} style='{$g} margin: 0 10px'><a href='{$_SERVER['PHP_SELF']}?page={$val['page']}{$paramets}'>{$val['ru']}</a></li>";
-            unset($id);
+            $s['ul'] .= "<li style='{$g} margin: 0 10px'><a href='{$_SERVER['PHP_SELF']}?page={$val['page']}{$paramets}'>{$val['ru']}</a></li>";
+            // unset($id);
         }
         $s['ul'] .= "</ul>";
     }
@@ -77,7 +127,7 @@ function sr_main($arr_in, $g = false, $paramets = null, $type = false){
 
 //Разлогирования
 function logout(){
-    setcookie('user', '', time()-3);
+    setcookie('user', '', 1);
     unset($_SESSION['cook']);
 }
 
@@ -118,31 +168,48 @@ function handler($post){
             exit;
         }
     }
-    $query =  $login ."','". password_hash($pass, PASSWORD_DEFAULT) ."','". $fio ."','". $date ."','". $email ."')";
-    if(!$cook = my_sql('registration', $login, $query)){
+    
+    $query = "INSERT INTO users (login, password, name_user, _date, email) VALUES (?,?,?,?,?)";
+
+    $mass = [
+        'date_stmt' => [$login, password_hash($pass, PASSWORD_DEFAULT), $fio, $date, $email],
+        'type' => 'sssss'
+    ];
+
+    if(!mysql_stmt($query,$mass)){
         unset($_SESSION['data']['login']);
         $_SESSION['error'] = ['login' => "Пользователь с таким ников уже существует, выберейти другой."];;
         header('Location: '. $_SERVER['PHP_SELF'] . REGISTRATION);
         exit;
     }
     $_SESSION['cook'] = 'registration';
-    setcookie('user', base64_encode(serialize($cook)), time()+3600*24*30);
+    $cookei = $mass['date_stmt'];
+    setcookie('user', base64_encode(serialize($cookei)), time()+3600*24*30);
     unset($_SESSION['data']);
 }
+
 //Аутентификация
 function log_user($post) {
     $login = trim(strip_tags($post['login']));
     $pass = trim(strip_tags($post['pass']));
 
-    if($arr_data = my_sql('authorization', $login)){
-        if(!(password_verify($pass, $arr_data['password']))){
+    $query = "SELECT login, password, name_user, _date, email FROM users WHERE login=?";
+
+    $mass = [
+        'date_stmt' => $login,
+        'type' => 's',
+        'date_answer' => ['login' => 'login','pass'=> 'pass','name_user'=> 'name_user','date'=> 'date','email'=> 'email'],
+    ];
+
+    if($cook = mysql_stmt($query, $mass, true)){
+        if(!(password_verify($pass, $cook[1]))){
             header("location: {$_SERVER['PHP_SELF']}" . MAIN);
             $_SESSION['error'] = ["auth" => "Не верный логин или пароль."];
             exit;
         }
         $_SESSION['cook'] = 'registration';
-        setcookie('user', base64_encode(serialize($arr_data)), time()+3600*24*30);
+        setcookie('user', base64_encode(serialize($cook)), time()+3600*24*30);
     } else {
         $_SESSION['error'] = ["auth" => "Не верный логин или пароль."];
-    }   
+    }      
 }

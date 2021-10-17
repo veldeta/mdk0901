@@ -102,7 +102,7 @@ $hash = password_hash($ha, PASSWORD_DEFAULT);
     </div>
 
     <?
-    echo "<script>let id_page = '{$_SESSION['id']}'</script>";
+    // echo "<script>let id_page = '{$_SESSION['id']}'</script>";
     echo "<script src='acce/{$arr['acce']['js']['name']}'></script>";
     $mass = sr_main($arr['acce']['js'][$page], false, null, 'js');
     echo $mass['js'];
