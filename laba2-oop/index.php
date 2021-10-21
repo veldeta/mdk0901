@@ -23,16 +23,23 @@ if ($_SERVER['PATH_INFO']) {
 
 $page = $_GET['paramets'] ?? $_GET['page'];
 
-if ($page) {
-    $keys = array_keys($_GET);
-    validateUrl($keys, $page, $arr, $ex);
-} else {
-    toMain();
+if (!$page && $_GET) {
+    header("Location:{$_SERVER['PHP_SELF']}" . MAIN);
+    exit;
 }
 
 if ($_COOKIE['user']) {
     $user = unserialize(base64_decode($_COOKIE['user']));
     $ex = 'registration';
+}
+if ($page) {
+    if (!array_key_exists($_GET['page'], $arr) || ($_GET['paramets'])
+        ? (array_key_exists($page, $arr))
+        ? !array_key_exists($_GET['page'], $arr[$page]['sub']) : true : '' || $_GET['page'] == $ex
+    ) {
+        header("Location:{$_SERVER['PHP_SELF']}" . MAIN);
+        exit;
+    }
 }
 
 $hash = password_hash($ha, PASSWORD_DEFAULT);

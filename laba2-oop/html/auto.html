@@ -1,0 +1,41 @@
+
+<? if(!$user) : ?>
+<div class="form" style="width: 255px;">
+    <form action="<?= $_SERVER['PHP_SELF'] . '?page=main' ?>" method="post">
+        <div>
+            <p>Логин:</p>
+            <lable><input type="text" name="login" placeholder="user" required></lable>
+        </div>
+        <div>
+            <p>Пароль:</p>
+            <lable><input type="password" name="pass" required></lable>
+        </div>
+        <div>
+            <lable><input type="hidden" name="hash" value="<?= $hash ?>"></lable>
+        </div>
+        <div>
+            <lable><input type="submit" name="sendlogin" value="Войти"></lable>
+        </div>
+    </form>
+<?
+        $err = $_SESSION['error']['auth'];
+        if($err){
+            echo "<h3>{$err}</h3>";
+            unset($_SESSION['error']);
+        }
+?>
+</div> 
+
+
+<? elseif($user) : ?>
+<div class="logout">
+    <form method="post" action="<?= $_SERVER['PHP_SELF'] . '?page=main' ?>">
+        <div>
+            <lable><input type="hidden" name="hash" value="<?= $hash ?>"></lable>
+        </div>
+        <div>
+            <lable><input type="submit" name="logout" value="Выход" /></lable>
+        </div>
+    </form>
+</div>
+<? endif ?>

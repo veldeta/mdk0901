@@ -1,0 +1,61 @@
+<div style="margin: 0 auto; width: 20%" class="form">
+    <form action="<?= $_SERVER['PHP_SELF'] . '?page=main'?>" method="post">
+        <div>
+            <lable>
+                <p>Имя:</p>
+                <input type="text" name="login" placeholder="user"  value="<?= $_SESSION['data']['login']?>" required>
+            </lable>
+        </div>
+        <div>
+            <lable>
+                <p>Пароль:</p>
+                <input type="password" name="pass" min="8" required>
+            </lable>
+        </div>
+        <div>
+            <lable>
+                <p>Подтверждения пароля:</p>
+                <input type="password" name="pass2" min="8" required>
+            </lable>
+        </div>
+        <div>
+            <lable>
+                <p>ФИО:</p>
+                <input type="text" name="fio" placeholder="Иванов Иван Иванович"  value="<?= $_SESSION['data']['fio']?>" required>
+            </lable>
+        </div>
+        <div>
+            <lable>
+                <p>Дата рождения:</p>
+                <input type="date" name="date"  value="<?= $_SESSION['data']['date']?>" required>
+            </lable>
+        </div>
+        <div>
+            <lable>
+                <p>Почта:</p>
+                <input type="email" name="email" required placeholder="user@user.ru" value="<?= $_SESSION['data']['email']?>" >
+            </lable>
+        </div>
+        <div>
+            <label>
+                <input type="hidden" name="hash" value="<?= $hash ?>">
+            </label>
+        </div>
+        <div>
+            <lable>
+                <input type="submit" name="sendreg" value="Зарегистрироваться">
+            </lable>
+        </div>
+    </form>
+
+    <div>
+        <?
+        $err = $_SESSION['error']['pass'] ?? $_SESSION['error']['login'] ?? $_SESSION['error']['age'];
+        if($err){
+            echo "<h3>{$err}</h3>";
+            unset($_SESSION['error']);
+        }
+        ?>
+        
+    </div>
+</div>

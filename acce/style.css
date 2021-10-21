@@ -43,3 +43,85 @@ button:active{
     transform: translateY(3px);
     box-shadow: 3px 3px 5px black;
 }
+.right{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 100px;
+}
+.red{
+    color: red;
+}
+.blockdiv{
+    width: 30%;
+    margin: 0 auto;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px;
+    border-radius: 10px;
+}
+.blockdiv input {
+    width: 100%;
+    font-family: Tahoma;
+    font-size: 1.3em;
+    height: 3em;
+    border-radius: 10px;
+    border: none;
+    padding: 0 20px;
+    background-color: gainsboro;
+}
+.blockdiv input:focus,
+.blockdiv textarea:focus{
+    outline: 0;
+}
+.blockdiv textarea {
+    margin-bottom: 1.5em;
+    width: 100%;
+    font-family: Tahoma;
+    font-size: 1.3em;
+    height: 10em;
+    border-radius: 10px;
+    border: none;
+    padding: 10px 20px;
+    background-color: gainsboro;
+}
+.blockdiv input[type="submit"]{
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    background: linear-gradient(rgba(255,255,0, .8), rgba(28, 212, 68, .8));
+    box-shadow: 6px 6px 10px black;
+}
+.blockdiv input[type="submit"]:active{
+    transform: translateY(3px);
+    box-shadow: 3px 3px 5px black;
+}
+.znak{
+    font-size: .7em;
+}
+.znak:hover::after{
+    content: 'Если имя файла был указан как путь, то этот пункт не обязательный';
+    position: absolute;
+    margin-left: 10px;
+    width: 200px;
+    transition: all 1s;
+    background-color: rgba(189, 189, 189, 0.7);
+    border-radius: 10px;
+    padding: 4px;
+}
+input[name="delete"]{
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    background: linear-gradient(rgba(255, 0, 0, 1), rgba(223, 0, 0, 1));
+    box-shadow: 6px 6px 10px black;
+}
+input[name="delete"]:active{
+    transform: translateY(3px);
+    box-shadow: 3px 3px 5px black;
+}
