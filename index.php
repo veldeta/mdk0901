@@ -1,4 +1,4 @@
-<?
+<?php
 if($_SERVER['PATH_TRANSLATED']){
     header('Location: '. $_SERVER['SCRIPT_NAME']);
     exit;
@@ -152,7 +152,7 @@ if(!$_GET){
     </form>
     FORM;
 
-} elseif(!empty($_GET['paramet']) && $_GET['send'] == 'senddelete'){
+} elseif (!empty($_GET['paramet']) && $_GET['send'] == 'senddelete'){
     echo block($ur, true);
 }
 ?>

@@ -55,7 +55,7 @@ function mysql_stmt($query, $mass = null, $answer = false)
             call_user_func_array(array($stmts, 'bind_result'), $param);
         }
 
-        $res = (mysqli_stmt_execute($stmts)) ?  true : false;
+        $res = mysqli_stmt_execute($stmts);
 
         if (!empty($pos)) {
             mysqli_stmt_fetch($stmts);

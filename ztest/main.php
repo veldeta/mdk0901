@@ -1,11 +1,32 @@
 <?php
-// echo $_SERVER['REQUEST_URI'];
 
+// $n = require_once 'db.php';
 
-if($_SERVER['PATH_TRANSLATED']){
-   header("location: {$_SERVER['SCRIPT_NAME']}");
-   exit;
+class M 
+{
+   public $name;
+   public $argv = false;
+   private static $dbname;
+
+   function __construct($name){
+      $this->name = $name;
+      self::$dbname = require_once 'db.php';
+   }
+
+   public function Mm($age){
+      if($age > 1){
+         $this->dMm();
+      }
+   }
+   
+   private function dMm(){
+      var_dump(self::$dbname);
+      var_dump(!$this->name['d']);
+   }
 }
-var_dump($_SERVER);
-var_dump($_GET);
-echo "<a href='{$_SERVER['REQUEST_URI']}/'>{$_SERVER['PHP_SELF']}</a>";
+$mm = new M(['dd'=>'dd','dd2' => 'dasd', 'd' => 'asd']);
+$mm->argv = true;
+
+$mm->Mm(2);
+var_dump($mm);
+// var_dump($n);
