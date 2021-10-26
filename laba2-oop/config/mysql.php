@@ -67,7 +67,7 @@ class MyStmt extends MysqliSlava
         }
 
         $stmt->close();
-        
+
         return $res;
     }
 

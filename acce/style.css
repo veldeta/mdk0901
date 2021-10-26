@@ -125,3 +125,13 @@ input[name="delete"]:active{
     transform: translateY(3px);
     box-shadow: 3px 3px 5px black;
 }
+.fix{
+    position: fixed;
+}
+.create{
+    left: 89%;
+}
+.back{
+    left: 92%;
+    top: 92%;
+}

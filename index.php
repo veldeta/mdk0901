@@ -15,9 +15,10 @@ function removeDirectory($dir) {
     }
     rmdir($dir);
 }
-if($_GET && $_GET['paramet'] != 'create' && $_GET['paramet'] != 'delete'){
+if($_GET && $_GET['paramet'] != 'action' && $_GET['paramet'] != 'delete'){
     toMain();   
 }
+
 if($_GET['paramet'] == 'delete'){
     removeDirectory($_GET['dir']);
     toMain();
@@ -102,15 +103,16 @@ if($_GET['buttoncreate']){
 <body>
 <form action='<?= $_SERVER['SCRIPT_NAME']?>' method='get'> 
     <div class="right">
-        <input  type="hidden" name="paramet" value="create">
+        <input  type="hidden" name="paramet" value="action">
         <lable>
-            <button  type="submit" name="send" value="sendcreate">Создать</button>
-            <button  type="submit" name="send" value="senddelete">Удалить</button>
+            <button class="create" type="submit" name="send" value="sendcreate">Создать</button>
+            <button class="delete" type="submit" name="send" value="senddelete">Удалить</button>
         </lable>    
     </div>
     
 </form>
 
+<a href="<?= $_SERVER['SCRIPT_NAME']?>"  class="back fix"><button>Назад</button></a>
 <?php 
 if(!$_GET){
     echo block($ur);
@@ -119,7 +121,7 @@ if(!$_GET){
     echo <<<FORM
     <form action='{$_SERVER['PHP_SELF']}' method="get" class="blockdiv">
         <span class="red">* Обязательные для заполнения</span>
-        <input type="hidden" name="paramet" value="create">
+        <input type="hidden" name="paramet" value="action">
         <div>
             <lable>
                 <p><span class="red">*</span> Имя файла или путь к файлу</p>
