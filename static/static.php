@@ -1,5 +1,5 @@
 <?php
-
+/*
 class user{
 
     public $name;
@@ -94,5 +94,24 @@ $SuperUser4->sex = 'Male';
 echo "Всего обычных пользователей: " . User::$num;
 echo "<br>";
 echo "Всего супер-пользователей: " . SuperUser::$num2;
+*/
 
+function __autoload($class){
+    echo 'ok';
+}
+
+
+// class Calc
+// {
+//     const PI = M_PI;
+
+//     static function calc_len($r){
+//         return 2 * $r * self::PI;
+//     }
+// }
+
+$o = new Calc();
+
+// echo Calc::calc_len(10);
+// echo Calc::PI;
 
